@@ -31,25 +31,28 @@ function getBranch(lastPrefix, isLast) {
 }
 
 
-function printDirTree(dirpath, lastprefix = '', depth = 0) {
-    depth = depth - 1
-    let dir = fs.readdirSync(dirpath, {withFileTypes: true})
-    for (const dirent of dir) {
-        let graphics = getBranch(lastprefix, (dirent.name === dir[dir.length - 1].name))
-        if (dirent.isDirectory()) {
-            counters.dirs++;
-            console.log(lastprefix + graphics.prefix + dirent.name)
-             if ((depth > 0 || depth < 0)) printDirTree(path.join(dirpath, dirent.name), graphics.branch, depth);
-        } else {
-            counters.files++;
-            console.log(lastprefix + graphics.prefix + dirent.name)
+function printDirTree(depth) {
+    return function d(dirpath, lastprefix = '', level = 0) {
+        level++;
+        let dir = fs.readdirSync(dirpath, {withFileTypes: true})
+        for (const dirent of dir) {
+            let graphics = getBranch(lastprefix, (dirent.name === dir[dir.length - 1].name))
+            if (dirent.isDirectory()) {
+                counters.dirs++;
+                console.log(lastprefix + graphics.prefix + dirent.name)
+                if ((depth && depth > level) || !depth) d(path.join(dirpath, dirent.name), graphics.branch, level);
+            } else {
+                counters.files++;
+                console.log(lastprefix + graphics.prefix + dirent.name)
+            }
         }
     }
 }
 
+
 function main() {
     let params = getParams();
-    printDirTree(params.path, '', params.depth);
+    printDirTree(params.depth)(params.path);
     Object.keys(counters).forEach((key) => { console.log(key + ' ' + counters[key]) })
 }
 
