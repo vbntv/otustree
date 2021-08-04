@@ -31,15 +31,15 @@ function getBranch(lastPrefix, isLast) {
 }
 
 
-async function printDirTree(dirpath, lastprefix = '', depth = 0) {
-    depth = depth - 1;
+function printDirTree(dirpath, lastprefix = '', depth = 0) {
+    depth = depth - 1
     let dir = fs.readdirSync(dirpath, {withFileTypes: true})
-    for await (const dirent of dir) {
+    for (const dirent of dir) {
         let graphics = getBranch(lastprefix, (dirent.name === dir[dir.length - 1].name))
         if (dirent.isDirectory()) {
             counters.dirs++;
             console.log(lastprefix + graphics.prefix + dirent.name)
-             if ((depth > 0 || depth < 0)) await printDirTree(path.join(dirpath, dirent.name), graphics.branch, depth);
+             if ((depth > 0 || depth < 0)) printDirTree(path.join(dirpath, dirent.name), graphics.branch, depth);
         } else {
             counters.files++;
             console.log(lastprefix + graphics.prefix + dirent.name)
@@ -47,9 +47,9 @@ async function printDirTree(dirpath, lastprefix = '', depth = 0) {
     }
 }
 
-async function main() {
+function main() {
     let params = getParams();
-    await printDirTree(params.path, '', params.depth);
+    printDirTree(params.path, '', params.depth);
     Object.keys(counters).forEach((key) => { console.log(key + ' ' + counters[key]) })
 }
 
