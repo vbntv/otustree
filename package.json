@@ -4,8 +4,8 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start":  "node src/index.js"
+    "test": "jest",
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",
@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/vbntv/otustree/issues"
   },
-  "homepage": "https://github.com/vbntv/otustree#readme"
+  "homepage": "https://github.com/vbntv/otustree#readme",
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "jest-console": "^0.1.0"
+  }
 }
